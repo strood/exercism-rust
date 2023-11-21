@@ -3,9 +3,7 @@ pub fn is_valid_isbn(isbn: &str) -> bool {
     // Clean input into a digit vector
     let mut digits = Vec::new();
     for (i, c) in isbn.char_indices() {
-        if c.is_digit(10) {
-            digits.push(c);
-        } else if c == 'X' && i == isbn.len() - 1 {
+        if c.is_ascii_digit() || c == 'X' && i == isbn.len() - 1 {
             digits.push(c);
         } else if c == '-' {
             continue;

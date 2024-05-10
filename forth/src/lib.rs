@@ -162,12 +162,9 @@ impl Forth {
                 .or(Some(&instruction.to_string()))
                 .cloned();
 
-            let nested_definition = self
-                .definitions
-                .get(definition.clone().unwrap().as_str())
-                .cloned();
-
-            if let Some(nested_definition) = nested_definition {
+            if let Some(nested_definition) =
+                self.definitions.get(definition.clone().unwrap().as_str())
+            {
                 let current_definition = nested_definition.clone();
                 self.eval_definition(&current_definition)?;
                 continue;

@@ -1,4 +1,15 @@
 pub fn encode(n: u64) -> String {
+    fn handle_encode(n: u64, div: u64, base: String) -> String {
+        let remainder = n % div;
+        let thousands = n / div;
+        let remainder_str = encode(remainder);
+        let thousands_str = encode(thousands);
+        if remainder == 0 {
+            format!("{} {}", thousands_str, base)
+        } else {
+            format!("{} {} {}", thousands_str, base, remainder_str)
+        }
+    }
     match n {
         0 => String::from("zero"),
         1 => String::from("one"),
@@ -53,82 +64,18 @@ pub fn encode(n: u64) -> String {
                 format!("{}-{}", tens_str, ones_str)
             }
         }
-        100..=999 => {
-            let hundreds = n / 100;
-            let remainder = n % 100;
-            let hundreds_str = encode(hundreds);
-            let remainder_str = encode(remainder);
-            if remainder == 0 {
-                format!("{} hundred", hundreds_str)
-            } else {
-                format!("{} hundred {}", hundreds_str, remainder_str)
-            }
-        }
-        1000..=999_999 => {
-            let thousands = n / 1000;
-            let remainder = n % 1000;
-            let thousands_str = encode(thousands);
-            let remainder_str = encode(remainder);
-            if remainder == 0 {
-                format!("{} thousand", thousands_str)
-            } else {
-                format!("{} thousand {}", thousands_str, remainder_str)
-            }
-        }
-        1_000_000..=999_999_999 => {
-            let millions = n / 1_000_000;
-            let remainder = n % 1_000_000;
-            let millions_str = encode(millions);
-            let remainder_str = encode(remainder);
-            if remainder == 0 {
-                format!("{} million", millions_str)
-            } else {
-                format!("{} million {}", millions_str, remainder_str)
-            }
-        }
-        1_000_000_000..=999_999_999_999 => {
-            let billions = n / 1_000_000_000;
-            let remainder = n % 1_000_000_000;
-            let billions_str = encode(billions);
-            let remainder_str = encode(remainder);
-            if remainder == 0 {
-                format!("{} billion", billions_str)
-            } else {
-                format!("{} billion {}", billions_str, remainder_str)
-            }
-        }
+        100..=999 => handle_encode(n, 100, String::from("hundred")),
+        1000..=999_999 => handle_encode(n, 1000, String::from("thousand")),
+        1_000_000..=999_999_999 => handle_encode(n, 1_000_000, String::from("million")),
+        1_000_000_000..=999_999_999_999 => handle_encode(n, 1_000_000_000, String::from("billion")),
         1_000_000_000_000..=999_999_999_999_999 => {
-            let trillions = n / 1_000_000_000_000;
-            let remainder = n % 1_000_000_000_000;
-            let trillions_str = encode(trillions);
-            let remainder_str = encode(remainder);
-            if remainder == 0 {
-                format!("{} trillion", trillions_str)
-            } else {
-                format!("{} trillion {}", trillions_str, remainder_str)
-            }
+            handle_encode(n, 1_000_000_000_000, String::from("trillion"))
         }
         1_000_000_000_000_000..=999_999_999_999_999_999 => {
-            let quadrillions = n / 1_000_000_000_000_000;
-            let remainder = n % 1_000_000_000_000_000;
-            let quadrillions_str = encode(quadrillions);
-            let remainder_str = encode(remainder);
-            if remainder == 0 {
-                format!("{} quadrillion", quadrillions_str)
-            } else {
-                format!("{} quadrillion {}", quadrillions_str, remainder_str)
-            }
+            handle_encode(n, 1_000_000_000_000_000, String::from("quadrillion"))
         }
         1_000_000_000_000_000_000..=u64::MAX => {
-            let quintillions = n / 1_000_000_000_000_000_000;
-            let remainder = n % 1_000_000_000_000_000_000;
-            let quintillions_str = encode(quintillions);
-            let remainder_str = encode(remainder);
-            if remainder == 0 {
-                format!("{} quintillion", quintillions_str)
-            } else {
-                format!("{} quintillion {}", quintillions_str, remainder_str)
-            }
+            handle_encode(n, 1_000_000_000_000_000_000, String::from("quintillion"))
         }
     }
 }

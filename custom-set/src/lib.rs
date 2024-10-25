@@ -8,10 +8,7 @@ impl<T: Clone + PartialEq + Ord> CustomSet<T> {
         let mut set = CustomSet {
             items: Vec::new()
         };
-        for item in input {
-            set.add(item.clone());
-        }
-        set.sort();
+        input.iter().for_each(|item| set.add(item.clone()));
         set
     }
 
@@ -43,41 +40,35 @@ impl<T: Clone + PartialEq + Ord> CustomSet<T> {
 
     #[must_use]
     pub fn intersection(&self, _other: &Self) -> Self {
-        let mut set = CustomSet {
-            items: Vec::new()
-        };
-        for item in self.items.iter() {
-            if _other.contains(item) {
-                set.add(item.clone());
-            }
+        CustomSet {
+            items: self.items.iter().fold(Vec::new(), |mut acc, item| {
+                if _other.contains(item) {
+                    acc.push(item.clone());
+                }
+                acc
+            })
         }
-        set
     }
 
     #[must_use]
     pub fn difference(&self, _other: &Self) -> Self {
-        let mut set = CustomSet {
-            items: Vec::new()
-        };
-        for item in self.items.iter() {
-            if !_other.contains(item) {
-                set.add(item.clone());
-            }
+        CustomSet {
+            items: self.items.iter().fold(Vec::new(), |mut acc, item| {
+                if !_other.contains(item) {
+                    acc.push(item.clone());
+                }
+                acc
+            })
         }
-        set
     }
 
     #[must_use]
-    pub fn union(&self, _other: &Self) -> Self {
+    pub fn union(&self, other: &Self) -> Self {
         let mut set = CustomSet {
             items: Vec::new()
         };
-        for item in self.items.iter() {
-            set.add(item.clone());
-        }
-        for item in _other.items.iter() {
-            set.add(item.clone());
-        }
+        self.items.iter().for_each(|item| set.add(item.clone()));
+        other.items.iter().for_each(|item| set.add(item.clone()));
         set
     }
 }

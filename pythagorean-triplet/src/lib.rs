@@ -2,9 +2,8 @@ use std::collections::HashSet;
 
 // Euclids algo to find all pythagorean triplets for a given sum
 pub fn find(sum: u32) -> HashSet<[u32; 3]> {
-    let mut triplets = Vec::new();
-    let m_max = (sum as f64).sqrt() as u32;
-    for m in 2..=m_max {
+    let mut triplets = HashSet::new();
+    for m in 2..=sum/3 {
         for n in 1..m {
             // Find a triangle that works, then check all multiples of it
             if (m + n) % 2 == 1 && gcd(m, n) == 1 {
@@ -19,7 +18,7 @@ pub fn find(sum: u32) -> HashSet<[u32; 3]> {
                 }
                 if sum == triplet_sum {
                     triplet.sort();
-                    triplets.push(triplet);
+                    triplets.insert(triplet);
                 }
 
                 // Check multiples
@@ -28,16 +27,14 @@ pub fn find(sum: u32) -> HashSet<[u32; 3]> {
                     let mut triplet_mul = [k * a, k * b, k * c];
                     if triplet_mul.iter().sum::<u32>() == sum {
                         triplet_mul.sort();
-                        triplets.push(triplet_mul);
+                        triplets.insert(triplet_mul);
                     }
                     k += 1;
                 }
             }
         }
     }
-
-    triplets.into_iter().collect()
-
+    triplets
 }
 
 fn gcd(mut a: u32, mut b: u32) -> u32 {
